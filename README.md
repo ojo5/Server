@@ -17,14 +17,14 @@ C compiler (e.g., gcc)
 Basic understanding of networking and C programming
 
 
-## Build and Run
+### Build and Run
 Compile the server:
 
 ```sh
 gcc -o tcp_server tcp_server.c
-Run the server:
 ```
 
+Run the server:
 ```sh
 ./tcp_server
 ```
@@ -36,6 +36,6 @@ Connect to the server using a TCP client or tool (e.g., telnet).
 The server will echo back any data received from clients.
 
 
-### References:
+## References:
 https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
 chatGPT
