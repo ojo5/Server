@@ -10,8 +10,7 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
     return total_size;
 }
 
-// Function to perform the POST request
-void perform_post_request(const char *url, const char *post_data) {
+int main(void) {
     CURL *curl;
     CURLcode res;
 
@@ -21,9 +20,10 @@ void perform_post_request(const char *url, const char *post_data) {
 
     if(curl) {
         // Set the URL for the POST request
-        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1:12345     ");
 
         // Set the POST data
+        const char *post_data = "param1=value1&param2=value2";
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
 
         // Set the callback function to handle the response
@@ -43,14 +43,6 @@ void perform_post_request(const char *url, const char *post_data) {
 
     // Cleanup global libcurl resources
     curl_global_cleanup();
-}
-
-int main(void) {
-    const char *url = "http://127.0.0.1:12345";
-    const char *post_data = "param1=value1&param2=value2";
-
-    // Perform the POST request
-    perform_post_request(url, post_data);
 
     return 0;
 }

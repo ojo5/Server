@@ -17,15 +17,33 @@ void handle_client(int client_socket) {
         perror("recv");
         close(client_socket);
         return;
-    }   
+    }
     buffer[bytes_received] = '\0';  // Null-terminate the received data
 
     // Print the received data
     printf("Received data:\n%s\n", buffer);
 
-    // Simple response to acknowledge receipt
-    const char *response = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nHello, World!";
-    send(client_socket, response, strlen(response), 0);
+    // Check if the request is a POST request
+    if (strncmp(buffer, "POST", 4) == 0) {
+        // Look for the specific string in the POST data
+        if (strstr(buffer, "post_data") != NULL) {
+            // Respond with a 302 Found and a redirect location
+            const char *response = 
+                "HTTP/1.1 302 Found\r\n"
+                "Location: http://pwnd.com/\r\n"
+                "Content-Length: 0\r\n"
+                "\r\n";
+            send(client_socket, response, strlen(response), 0);
+        } else {
+            // If the POST data doesn't contain the specific string, send a 200 OK response
+            const char *response = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nNot correct POST data";
+            send(client_socket, response, strlen(response), 0);
+        }
+    } else {
+        // For non-POST requests, respond with a 200 OK
+        const char *response = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nNormal 200 Code!";
+        send(client_socket, response, strlen(response), 0);
+    }
 
     // Close the client socket
     close(client_socket);
