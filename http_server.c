@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define PORT 8080
+#define PORT 8082
 #define BUFFER_SIZE 1024
 
 void handle_client(int client_socket) {
@@ -39,9 +39,25 @@ void handle_client(int client_socket) {
             const char *response = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nNot correct POST data";
             send(client_socket, response, strlen(response), 0);
         }
-    } else {
-        // For non-POST requests, respond with a 200 OK
-        const char *response = "HTTP/1.1 200 OK\r\nContent-Length: 13\r\n\r\nNormal 200 Code!";
+    }
+    
+    if (strstr(buffer, "GET /token") != NULL) {
+        // Respond with a token_data response
+        const char *response =
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            "Content-Length: 10\r\n"
+            "\rTextField\n"
+            "Token: token_data";
+        send(client_socket, response, strlen(response), 0);
+    } else if (strcmp(buffer, "GET / HTTP/1.1\r\n") == 0) {
+        // Respond with an empty response specifically for the root URL
+        const char *response =
+            "HTTP/1.1 200 OK\r\n"
+            "Content-Type: text/plain\r\n"
+            "Content-Length: 5\r\n"
+            "\r\n"
+            "empty";
         send(client_socket, response, strlen(response), 0);
     }
 
