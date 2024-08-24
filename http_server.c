@@ -59,7 +59,7 @@ void handle_client(int client_socket) {
             "\r\n"
             "empty";
         send(client_socket, response, strlen(response), 0);
-    }
+    }   
 
     // Close the client socket
     close(client_socket);
